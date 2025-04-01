@@ -61,11 +61,11 @@ variable "alb_security_groups" {
   type        = list(string)
 }
 
-# The public subnet IDs for ALB come from the VPC module outputs
-variable "public_subnets_ids" {
-  description = "Public subnet IDs for ALB"
-  type        = list(string)
-}
+# # The public subnet IDs for ALB come from the VPC module outputs
+# variable "public_subnets_ids" {
+#   description = "Public subnet IDs for ALB"
+#   type        = list(string)
+# }
 
 variable "alb_frontend_port" {
   description = "Port for frontend target group"
@@ -157,10 +157,10 @@ variable "backend_image" {
   default     = "PLACEHOLDER_BACKEND_IMAGE"
 }
 
-variable "ecs_security_group_ids" {
-  description = "List of security group IDs for ECS tasks"
-  type        = list(string)
-}
+# variable "ecs_security_group_ids" {
+#   description = "List of security group IDs for ECS tasks"
+#   type        = list(string)
+# }
 
 variable "jenkins_role_arn" {
   description = "The ARN of the Jenkins server IAM role"

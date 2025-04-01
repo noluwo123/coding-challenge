@@ -63,7 +63,7 @@ module "frontend_service" {
   cluster_id         = module.ecs_cluster.id
   execution_role_arn = module.iam.ecs_task_execution_role_arn
   subnets            = module.vpc.private_subnets_ids
-  security_groups    = var.ecs_security_group_ids
+  security_groups    = module.ecs_service.ecs_security_group_ids
   target_group_arn   = module.alb.frontend_target_group_arn
   region             = var.aws_region
 }
@@ -81,7 +81,7 @@ module "backend_service" {
   cluster_id         = module.ecs_cluster.id
   execution_role_arn = module.iam.ecs_task_execution_role_arn
   subnets            = module.vpc.private_subnets_ids
-  security_groups    = var.ecs_security_group_ids
+  security_groups    = module.ecs_service.ecs_security_group_ids
   target_group_arn   = module.alb.backend_target_group_arn
   region             = var.aws_region
 }
