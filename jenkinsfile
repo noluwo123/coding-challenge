@@ -2,49 +2,57 @@ pipeline {
     agent any
   
     environment {
-	    AWS_DEFAULT_REGION="us-east-1"
-	    THE_BUTLER_SAYS_SO=credentials('aws-creds')
-      }
-
+        AWS_DEFAULT_REGION = "us-east-1"
+        THE_BUTLER_SAYS_SO = credentials('aws-creds')
+    }
+  
     stages {
-        stage('Checkout...') {
-              steps {
-                  git credentialsId: 'github-creds', url: 'https://github.com/noluwo123/coding-challenge.git', branch: 'noluwo/DC'
-              }
-         }
-      
-
-        stage("Build Backend Docker Image...") {
+        stage('Checkout Repository') {
             steps {
-              sh "docker build -t projectlightfeather-backend:$BUILD_NUMBER -f backend/Dockerfile ./backend"
+                echo 'Cloning repository from branch noluwo/DC...'
+                git url: 'https://github.com/noluwo123/coding-challenge.git',
+                    branch: 'noluwo/DC',
+                    extensions: [
+                        [$class: 'CloneOption', noTags: false, shallow: false, depth: 1, honorRefspec: true]
+                    ],
+                    poll: false
             }
         }
-
-        stage("Build Frontend Docker Image...") {
+      
+        stage("Build Backend Docker Image") {
             steps {
+                echo 'Building backend Docker image...'
+                sh "docker build -t projectlightfeather-backend:$BUILD_NUMBER -f backend/Dockerfile ./backend"
+            }
+        }
+      
+        stage("Build Frontend Docker Image") {
+            steps {
+                echo 'Building frontend Docker image...'
                 sh "docker build -t projectlightfeather-frontend:$BUILD_NUMBER -f frontend/Dockerfile ./frontend"
             }
         }
-	
-	    
-       stage ('Publish to ECR...') {
+      
+        stage('Publish to ECR') {
             steps {
-              sh '''
-              aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c6p1p1z3
-        
-              docker tag projectlightfeather-frontend:$BUILD_NUMBER public.ecr.aws/c6p1p1z3/lightfeather-frontend:$BUILD_NUMBER
-              docker push public.ecr.aws/c6p1p1z3/lightfeather-frontend:$BUILD_NUMBER
-              
-              docker tag projectlightfeather-backend:$BUILD_NUMBER public.ecr.aws/c6p1p1z3/lightfeather-backend:$BUILD_NUMBER
-              docker push public.ecr.aws/c6p1p1z3/lightfeather-backend:$BUILD_NUMBER
-              '''
+                echo 'Publishing images to AWS ECR Public...'
+                sh '''
+                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c6p1p1z3
+                
+                docker tag projectlightfeather-frontend:$BUILD_NUMBER public.ecr.aws/c6p1p1z3/lightfeather-frontend:$BUILD_NUMBER
+                docker push public.ecr.aws/c6p1p1z3/lightfeather-frontend:$BUILD_NUMBER
+                
+                docker tag projectlightfeather-backend:$BUILD_NUMBER public.ecr.aws/c6p1p1z3/lightfeather-backend:$BUILD_NUMBER
+                docker push public.ecr.aws/c6p1p1z3/lightfeather-backend:$BUILD_NUMBER
+                '''
             }
-          } 
+        }
     }
   
-  post {
+    post {
         always {
-	          cleanWs()
+            echo 'Cleaning up workspace...'
+            cleanWs()
         }
-   }
+    }
 }
