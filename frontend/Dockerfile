@@ -1,16 +1,23 @@
-FROM node:16-alpine as build
+# Use Node 16 with Alpine as the base image
+FROM node:16-alpine
 
+# Set the working directory
 WORKDIR /app
 
+# Copy package.json and package-lock.json before other files for better caching
 COPY package*.json ./
-RUN npm ci
 
+# Install npm packages
+RUN npm install
+
+# Copy the rest of the application code
 COPY . .
 
-# We'll need to modify this for production deployment
-# But for now, we'll set up a development build
-ENV NODE_ENV=development
+# Build the frontend application
+RUN npm run build
 
+# Expose the port the app runs on
 EXPOSE 3000
 
+# Start the application
 CMD ["npm", "start"]
