@@ -15,26 +15,26 @@ pipeline {
       
         stage("Build Backend Docker Image...") {
             steps {
-                sh "docker build -t projectlightfeather-backend:$BUILD_NUMBER -f backend/Dockerfile ./backend"
+                sh "docker build -t lightfeather-backend:$BUILD_NUMBER -f backend/Dockerfile ./backend"
             }
         }
 
         stage("Build Frontend Docker Image...") {
             steps {
-                sh "docker build -t projectlightfeather-frontend:$BUILD_NUMBER -f frontend/Dockerfile ./frontend"
+                sh "docker build -t lightfeather-frontend:$BUILD_NUMBER -f frontend/Dockerfile ./frontend"
             }
         }
 	
         stage('Publish to ECR...') {
             steps {
                 sh '''
-                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c6p1p1z3
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 139282551466.dkr.ecr.us-east-1.amazonaws.com
         
-                docker tag projectlightfeather-frontend:$BUILD_NUMBER public.ecr.aws/c6p1p1z3/lightfeather-frontend:$BUILD_NUMBER
-                docker push public.ecr.aws/c6p1p1z3/lightfeather-frontend:$BUILD_NUMBER
+                docker tag lightfeather-frontend:$BUILD_NUMBER 139282551466.dkr.ecr.us-east-1.amazonaws.com/lightfeather-frontend:$BUILD_NUMBER
+                docker push 139282551466.dkr.ecr.us-east-1.amazonaws.com/lightfeather-frontend:$BUILD_NUMBER
               
-                docker tag projectlightfeather-backend:$BUILD_NUMBER public.ecr.aws/c6p1p1z3/lightfeather-backend:$BUILD_NUMBER
-                docker push public.ecr.aws/c6p1p1z3/lightfeather-backend:$BUILD_NUMBER
+                docker tag lightfeather-backend:$BUILD_NUMBER 139282551466.dkr.ecr.us-east-1.amazonaws.com/lightfeather-backend:$BUILD_NUMBER
+                docker push 139282551466.dkr.ecr.us-east-1.amazonaws.com/lightfeather-backend:$BUILD_NUMBER
                 '''
             }
         }
