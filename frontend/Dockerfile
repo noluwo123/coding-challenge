@@ -1,33 +1,23 @@
-# FROM node:16-alpine as build
+# Use Node 16 with Alpine as the base image
+FROM node:16-alpine
 
-# WORKDIR /app
-
-# COPY package*.json ./
-# RUN npm ci
-
-# COPY . .
-
-# # We'll need to modify this for production deployment
-# # But for now, we'll set up a development build
-# ENV NODE_ENV=development
-
-# EXPOSE 3000
-
-# CMD ["npm", "start"]
-
-# Stage 1: Build the React app
-FROM node:16-alpine AS build
+# Set the working directory
 WORKDIR /app
-COPY frontend/package*.json ./
-RUN npm install --production
-COPY frontend/. . 
+
+# Copy package.json and package-lock.json before other files for better caching
+COPY package*.json ./
+
+# Install npm packages
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the frontend application
 RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:1.21-alpine
-COPY --from=build /app/build /usr/share/nginx/html
-# Copy a basic nginx config to handle routing (if needed)
-COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf 
-# Expose port 80 for the Nginx web server
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]

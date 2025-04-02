@@ -1,21 +1,20 @@
-# FROM node:16-alpine
-
-# WORKDIR /app
-
-# COPY package*.json ./
-# RUN npm ci
-
-# COPY . .
-
-# EXPOSE 8080
-
-# CMD ["npm", "start"]
-
+# Use Node 16 with Alpine as the base image
 FROM node:16-alpine
+
+# Set the working directory
 WORKDIR /app
-COPY backend/package*.json ./
-RUN npm install --production
-COPY backend/. .
-# Expose the port that the Express app listens on (e.g., 3000)
-EXPOSE 3000
+
+# Copy package.json and package-lock.json before other files for better caching
+COPY package*.json ./
+
+# Install npm packages
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Start the application
 CMD ["npm", "start"]
