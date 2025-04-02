@@ -9,8 +9,7 @@ pipeline {
     stages {
         stage('Checkout...') {
               steps {
-                  def gitUrl = "https://github.com/noluwo123/coding-challenge.git"
-def gitBranches = "git ls-remote --heads ${gitUrl}".execute().text.readLines().collect { it.split()[1].replaceAll("refs/heads/", "") }.sort().reverse()
+                    git credentialsId: 'github-creds', url: 'https://github.com/noluwo123/coding-challenge.git'
               }
          }
       
