@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout...') {
             steps {
-                git credentialsId: 'github-creds', url: 'https://github.com/noluwo123/coding-challenge.git'
+                git branch: 'main', url: 'https://github.com/noluwo123/coding-challenge.git'
             }
         }
       
