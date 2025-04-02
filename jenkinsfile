@@ -13,7 +13,8 @@ pipeline {
                 git url: 'https://github.com/noluwo123/coding-challenge.git',
                     branch: 'noluwo/DC',
                     extensions: [
-                        [$class: 'CloneOption', noTags: false, shallow: false, depth: 1, honorRefspec: true]
+                        // Override the default refspec so that only the noluwo/DC branch is fetched.
+                        [$class: 'CloneOption', shallow: false, honorRefspec: true, localBranch: 'noluwo/DC']
                     ],
                     poll: false
             }
