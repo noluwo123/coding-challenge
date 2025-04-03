@@ -62,8 +62,8 @@ This is not an exhaustive list of extra features that could be added to this cod
 The following are the steps needed to deploy my application:
 1. Create two image repositories on AWS ECR.
 2. Access Jenkins Automation Server console already provisioned and running on AWS account using this url http://ec2-18-209-57-182.compute-1.amazonaws.com:8080
-3. username for Jenkins: noluwo
-4. password for Jenkins: Midwifery2@
+3. username for Jenkins: James
+4. password for Jenkins: James
 5. On Jenkins dashboard, click on "New item" to create a new pipeline job
 6. Give a name to your new pipeline job, select "Pipeline" option and click "OK"
 7. On the "Configuration" page that follows, scroll down to "Pipeline" section.
