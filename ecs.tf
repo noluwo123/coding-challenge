@@ -191,7 +191,7 @@ resource "aws_ecs_task_definition" "backend" {
 [
   {
     "name": "backend",
-    "image": "public.ecr.aws/c6p1p1z3/lightfeather-backend:19",
+    "image": "public.ecr.aws/o3l1z7u7/projectlightfeather-backend:1",
     "memoryReservation": 1024,
     "cpu":  512,
     "portMappings": [
@@ -218,7 +218,7 @@ resource "aws_ecs_task_definition" "frontend" {
 [
   {
     "name": "frontend",
-    "image": "public.ecr.aws/c6p1p1z3/lightfeather-frontend:19",
+    "image": "public.ecr.aws/o3l1z7u7/projectlightfeather-frontend:1",
     "memoryReservation": 1024,
     "cpu":  512,
     "portMappings": [
